@@ -1,0 +1,46 @@
+const express = require('express');
+const router = express.Router();
+let devices = [
+    { id: 1, name: "Galaxy S24", brand: "Samsung", type: "Smartphone", price: 799 },
+    { id: 2, name: "MacBook Air", brand: "Apple", type: "Laptop", price: 999 },
+    { id: 3, name: "WH-1000XM5", brand: "Sony", type: "Headphones", price: 349 }
+];
+router.get('/', (req, res) => {
+    res.json(devices);
+});
+router.get('/:id', (req, res) => {
+    const device = devices.find(d => d.id == req.params.id);
+    device ? res.json(device) : res.status(404).send("Device not found");
+});
+router.post('/', (req, res) => {
+    const newDevice = {
+        id: devices.length + 1, // Basic ID generation
+        ...req.body
+    };
+    devices.push(newDevice);
+    res.status(201).send("Device added to inventory successfully");
+});
+router.put('/:id', (req, res) => {
+    devices = devices.map(d =>
+        d.id == req.params.id ? { ...d, ...req.body } : d
+    );
+    res.send("Device information updated");
+});
+
+// BULK UPDATE multiple devices
+router.put('/', (req, res) => {
+    req.body.forEach(update => {
+        devices = devices.map(d =>
+            d.id == update.id ? { ...d, ...update } : d
+        );
+    });
+    res.send("Multiple devices updated in inventory");
+});
+
+// DELETE a device
+router.delete('/:id', (req, res) => {
+    devices = devices.filter(d => d.id != req.params.id);
+    res.send("Device removed from inventory");
+});
+
+module.exports = router;
