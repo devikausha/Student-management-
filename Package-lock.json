@@ -1,0 +1,9 @@
+{
+  "name": "electronic-device-manager",
+  "version": "1.0.0",
+  "description": "A system to track electronic inventory",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
